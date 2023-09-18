@@ -40,7 +40,7 @@ public class CellecAddressController {
     public ResponseEntity add(@RequestBody CellecAddress cellecAddress){
         cellecAddress.setCreateTime(new Date());
         cellecAddressService.save(cellecAddress);
-        return ResponseEntity.ok("添加成功");
+        return ResponseEntity.ok("添加成功!");
     }
     @ApiOperation("修改用户地址")
     @PostMapping("/edit")
