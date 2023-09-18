@@ -8,13 +8,15 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.CellInfo;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.service.CellInfoService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Qian Sheng
@@ -38,5 +40,25 @@ public class CellInfoController  {
         Page<CellInfo> pageList=cellInfoService.page(page,queryWrapper);
         ResponseEntity.status(200);
         return ResponseEntity.ok(pageList);
+    }
+    @ApiOperation("添加藏品信息")
+    @PostMapping("/add")
+    public ResponseEntity add(@RequestBody CellInfo collInfo){
+        collInfo.setCreateTime(new Date());
+        cellInfoService.save(collInfo);
+        return ResponseEntity.ok("添加成功");
+    }
+    @ApiOperation("修改藏品信息")
+    @PostMapping("/edit")
+    public ResponseEntity edit(@RequestBody CellInfo collInfo){
+        collInfo.setCreateTime(new Date());
+        cellInfoService.save(collInfo);
+        return ResponseEntity.ok("修改成功");
+    }
+    @ApiOperation("删除藏品信息")
+    @GetMapping("/deleteByIds")
+    public ResponseEntity deleteById(@RequestParam String ids){
+        cellInfoService.removeByIds(Arrays.asList(ids.split(",")));
+        return ResponseEntity.ok("删除成功");
     }
 }

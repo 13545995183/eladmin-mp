@@ -6,24 +6,24 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.zhengjie.modules.system.domain.CellInfo;
-import me.zhengjie.modules.system.domain.CellUser;
-import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.*;
 import me.zhengjie.modules.system.domain.User;
-import me.zhengjie.modules.system.service.CellInfoService;
-import me.zhengjie.modules.system.service.CellUserService;
-import me.zhengjie.modules.system.service.DeptService;
-import me.zhengjie.modules.system.service.UserService;
+import me.zhengjie.modules.system.service.*;
 import me.zhengjie.utils.PageResult;
 import me.zhengjie.utils.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Qian Sheng
@@ -42,6 +42,8 @@ public class AppApiController {
     private CellUserService cellUserService;
     @Autowired
     private CellInfoService cellInfoService;
+    @Autowired
+    private CellecAddressService cellecAddressService;
 
     @ApiOperation("查询所有部门")
     @GetMapping("/getDeptList")
@@ -84,6 +86,25 @@ public class AppApiController {
         Page<CellInfo> pageList=cellInfoService.page(page,queryWrapper);
         ResponseEntity.status(200);
         return ResponseEntity.ok(pageList);
+    }
+
+    @ApiOperation("藏品用户地址列表")
+    @GetMapping("/collecAddressInfoByUserId")
+    public ResponseEntity<Page<CellecAddress>> cellAddressList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                                               @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                                               @RequestParam String userId){
+
+        QueryWrapper<CellecAddress> queryWrapper= new QueryWrapper<>();
+        queryWrapper.lambda().eq(CellecAddress::getUserId,userId);
+        Page<CellecAddress> page=new Page<>(pageNumber,pageSize);
+        Page<CellecAddress> pageList=cellecAddressService.page(page,queryWrapper);
+        return ResponseEntity.ok(pageList);
+    }
+    @ApiOperation("删除地址信息")
+    @GetMapping("/deleteAddressByIds")
+    public ResponseEntity deleteById(@RequestParam String ids){
+        cellecAddressService.removeBatchByIds(Arrays.asList(ids.split(",")));
+        return ResponseEntity.ok("删除成功");
     }
 }
 
