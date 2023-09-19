@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.*;
 import me.zhengjie.modules.system.domain.User;
+import me.zhengjie.modules.system.domain.vo.ResultEntity;
 import me.zhengjie.modules.system.service.*;
 import me.zhengjie.utils.PageResult;
 import me.zhengjie.utils.StringUtils;
@@ -131,6 +132,20 @@ public class AppApiController {
         cellecBankInfo.setUpdateTime(new Date());
         cellecBankInfoService.updateById(cellecBankInfo);
         return ResponseEntity.ok("修改成功");
+    }
+
+    @Autowired
+    private CollecBankWithdrawalRecordService collecBankWithdrawalRecordService;
+    @ApiOperation("交易信息列表")
+    @GetMapping("/cellBankWithdrawalRecordList")
+    public ResultEntity cellBankWithdrawalRecordList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                                     @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                                     @RequestParam String userId){
+        QueryWrapper<CollecBankWithdrawalRecord> queryWrapper=new QueryWrapper<>();
+        queryWrapper.lambda().eq(CollecBankWithdrawalRecord::getUserId,userId).orderByDesc(CollecBankWithdrawalRecord::getCreateTime);
+        Page<CollecBankWithdrawalRecord> page=new Page<>(pageNumber,pageSize);
+        Page<CollecBankWithdrawalRecord> pageList=collecBankWithdrawalRecordService.page(page,queryWrapper);
+        return ResultEntity.success(pageList.getRecords());
     }
 }
 
