@@ -16,13 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -100,11 +99,38 @@ public class AppApiController {
         Page<CellecAddress> pageList=cellecAddressService.page(page,queryWrapper);
         return ResponseEntity.ok(pageList);
     }
+    @ApiOperation("修改用户地址列表")
+    @PostMapping("/updateAddress")
+    public ResponseEntity updateAddress(@RequestBody CellecAddress cellecAddress){
+        cellecAddress.setUpdateTime(new Date());
+        cellecAddressService.updateById(cellecAddress);
+        return ResponseEntity.ok("修改地址成功");
+    }
     @ApiOperation("删除地址信息")
     @GetMapping("/deleteAddressByIds")
     public ResponseEntity deleteById(@RequestParam String ids){
         cellecAddressService.removeBatchByIds(Arrays.asList(ids.split(",")));
         return ResponseEntity.ok("删除成功");
+    }
+    @Autowired
+    private CellecBankInfoService cellecBankInfoService;
+    @ApiOperation("用户账户信息")
+    @GetMapping("/cellecBankInfoByUserId")
+    public ResponseEntity<Page<CellecBankInfo>> cellecBankInfoByUserId(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                                                       @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                                                       @RequestParam String userId){
+        QueryWrapper<CellecBankInfo> queryWrapper=new QueryWrapper<>();
+        queryWrapper.lambda().eq(CellecBankInfo::getUserId,userId);
+        Page<CellecBankInfo> page=new Page<>(pageNumber,pageSize);
+        Page<CellecBankInfo> pageList=cellecBankInfoService.page(page,queryWrapper);
+        return ResponseEntity.ok(pageList);
+    }
+    @ApiOperation("用户账户信息")
+    @PostMapping("/updateCellecBankInfo")
+    public  ResponseEntity updateCellecBankInfo(@RequestBody CellecBankInfo cellecBankInfo){
+        cellecBankInfo.setUpdateTime(new Date());
+        cellecBankInfoService.updateById(cellecBankInfo);
+        return ResponseEntity.ok("修改成功");
     }
 }
 

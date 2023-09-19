@@ -34,6 +34,15 @@ public class CellecBankInfoController {
                                String name){
         Page<CellecBankInfo> page = new Page<CellecBankInfo>(pageNumber,pageSize);
         QueryWrapper<CellecBankInfo> queryWrapper = new QueryWrapper<>();
+        if(!phone.isEmpty()){
+            queryWrapper.lambda().eq(CellecBankInfo::getPhone,phone);
+        }
+        if(!userId.isEmpty()){
+            queryWrapper.lambda().eq(CellecBankInfo::getUserId,userId);
+        }
+        if(!name.isEmpty()){
+            queryWrapper.lambda().eq(CellecBankInfo::getName,name);
+        }
         Page<CellecBankInfo> pageList =cellecBankInfoService.page(page,queryWrapper);
         return ResponseEntity.ok(pageList);
     }
