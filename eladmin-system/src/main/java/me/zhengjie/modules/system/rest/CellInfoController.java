@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.CellInfo;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.vo.ResultEntity;
 import me.zhengjie.modules.system.service.CellInfoService;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,34 +32,34 @@ public class CellInfoController  {
     private CellInfoService cellInfoService;
     @ApiOperation("查询所有藏品信息接口")
     @GetMapping("/list")
-    public ResponseEntity<Page<CellInfo>> cellInfoList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-                                                      @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
-                                                      CellInfo cellInfo,
-                                                      HttpRequest request){
+    public ResultEntity cellInfoList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                     @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                     CellInfo cellInfo,
+                                     HttpRequest request){
         Page<CellInfo> page=new Page<>(pageNumber,pageSize);
         QueryWrapper queryWrapper=new QueryWrapper();
         Page<CellInfo> pageList=cellInfoService.page(page,queryWrapper);
         ResponseEntity.status(200);
-        return ResponseEntity.ok(pageList);
+        return ResultEntity.success(pageList);
     }
     @ApiOperation("添加藏品信息")
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody CellInfo collInfo){
+    public ResultEntity add(@RequestBody CellInfo collInfo){
         collInfo.setCreateTime(new Date());
         cellInfoService.save(collInfo);
-        return ResponseEntity.ok("添加成功");
+        return ResultEntity.success("添加成功");
     }
     @ApiOperation("修改藏品信息")
     @PostMapping("/edit")
-    public ResponseEntity edit(@RequestBody CellInfo collInfo){
+    public ResultEntity edit(@RequestBody CellInfo collInfo){
         collInfo.setCreateTime(new Date());
         cellInfoService.save(collInfo);
-        return ResponseEntity.ok("修改成功");
+        return ResultEntity.success("修改成功");
     }
     @ApiOperation("删除藏品信息")
     @GetMapping("/deleteByIds")
-    public ResponseEntity deleteById(@RequestParam String ids){
+    public ResultEntity deleteById(@RequestParam String ids){
         cellInfoService.removeByIds(Arrays.asList(ids.split(",")));
-        return ResponseEntity.ok("删除成功");
+        return ResultEntity.success("删除成功");
     }
 }

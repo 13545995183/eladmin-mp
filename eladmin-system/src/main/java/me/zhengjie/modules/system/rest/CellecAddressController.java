@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.domain.vo.QiniuQueryCriteria;
 import me.zhengjie.modules.system.domain.CellInfo;
 import me.zhengjie.modules.system.domain.CellecAddress;
+import me.zhengjie.modules.system.domain.vo.ResultEntity;
 import me.zhengjie.modules.system.service.CellecAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -30,33 +31,33 @@ public class CellecAddressController {
     private CellecAddressService cellecAddressService;
     @ApiOperation("藏品用户地址列表")
     @GetMapping("/list")
-    public ResponseEntity<Page<CellecAddress>> list(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-                                                    @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
-                                                    HttpRequest request){
+    public ResultEntity list(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                             @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                             HttpRequest request){
         QueryWrapper<CellecAddress> queryWrapper= new QueryWrapper<>();
         Page<CellecAddress> page=new Page<>(pageNumber,pageSize);
         Page<CellecAddress> pageList=cellecAddressService.page(page,queryWrapper);
-        return ResponseEntity.ok(pageList);
+        return ResultEntity.success(pageList.getRecords());
     }
     @ApiOperation("添加用户地址")
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody CellecAddress cellecAddress){
+    public ResultEntity add(@RequestBody CellecAddress cellecAddress){
         cellecAddress.setCreateTime(new Date());
         cellecAddressService.save(cellecAddress);
-        return ResponseEntity.ok("添加成功!");
+        return ResultEntity.success("添加成功!");
     }
     @ApiOperation("修改用户地址")
     @PostMapping("/edit")
-    public ResponseEntity edit(@RequestBody CellecAddress cellecAddress){
+    public ResultEntity edit(@RequestBody CellecAddress cellecAddress){
         cellecAddress.setUpdateTime(new Date());
         cellecAddressService.updateById(cellecAddress);
-        return ResponseEntity.ok("修改地址成功");
+        return ResultEntity.success("修改地址成功");
     }
     @ApiOperation("删除地址信息")
     @GetMapping("/delete")
-    public ResponseEntity delete(@RequestParam String ids){
+    public ResultEntity delete(@RequestParam String ids){
         cellecAddressService.removeBatchByIds(Arrays.asList(ids.split(",")));
-        return ResponseEntity.ok("删除成功");
+        return ResultEntity.success("删除成功");
     }
 
 }

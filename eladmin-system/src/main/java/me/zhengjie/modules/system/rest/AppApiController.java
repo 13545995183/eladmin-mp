@@ -104,7 +104,7 @@ public class AppApiController {
     @PostMapping("/updateAddress")
     public ResultEntity updateAddress(@RequestBody CellecAddress cellecAddress){
         cellecAddress.setUpdateTime(new Date());
-        cellecAddressService.updateById(cellecAddress);
+        cellecAddressService.saveOrUpdate(cellecAddress);
         return ResultEntity.success("修改地址成功");
     }
     @ApiOperation("删除地址信息")
@@ -130,7 +130,7 @@ public class AppApiController {
     @PostMapping("/updateCellecBankInfo")
     public  ResultEntity updateCellecBankInfo(@RequestBody CellecBankInfo cellecBankInfo){
         cellecBankInfo.setUpdateTime(new Date());
-        cellecBankInfoService.updateById(cellecBankInfo);
+        cellecBankInfoService.saveOrUpdate(cellecBankInfo);
         return ResultEntity.success("修改成功");
     }
 

@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.CellecBankInfo;
+import me.zhengjie.modules.system.domain.vo.ResultEntity;
 import me.zhengjie.modules.system.service.CellecBankInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +28,11 @@ public class CellecBankInfoController {
     private CellecBankInfoService cellecBankInfoService;
     @ApiOperation("账户信息集合信息")
     @GetMapping("/list")
-    public ResponseEntity list(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-                               @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
-                               String phone,
-                               String userId,
-                               String name){
+    public ResultEntity list(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                             @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                             String phone,
+                             String userId,
+                             String name){
         Page<CellecBankInfo> page = new Page<CellecBankInfo>(pageNumber,pageSize);
         QueryWrapper<CellecBankInfo> queryWrapper = new QueryWrapper<>();
         if(!phone.isEmpty()){
@@ -44,26 +45,26 @@ public class CellecBankInfoController {
             queryWrapper.lambda().eq(CellecBankInfo::getName,name);
         }
         Page<CellecBankInfo> pageList =cellecBankInfoService.page(page,queryWrapper);
-        return ResponseEntity.ok(pageList);
+        return ResultEntity.success(pageList.getRecords());
     }
     @PostMapping("/add")
     @ApiOperation("添加账户信息")
-    public ResponseEntity add(@RequestBody CellecBankInfo cellecBankInfo){
+    public ResultEntity add(@RequestBody CellecBankInfo cellecBankInfo){
         cellecBankInfo.setCreateTime(new Date());
         cellecBankInfoService.save(cellecBankInfo);
-        return ResponseEntity.ok("成功添加");
+        return ResultEntity.success("成功添加");
     }
     @PostMapping("/edit")
     @ApiOperation("修改账户信息")
-    public ResponseEntity edit(@RequestBody CellecBankInfo cellecBankInfo){
+    public ResultEntity edit(@RequestBody CellecBankInfo cellecBankInfo){
         cellecBankInfo.setUpdateTime(new Date());
         cellecBankInfoService.updateById(cellecBankInfo);
-        return ResponseEntity.ok("修改账户信息成功");
+        return ResultEntity.success("修改账户信息成功");
     }
     @GetMapping("/delete")
     @ApiOperation("删除账户信息")
-    public ResponseEntity edit(@RequestParam String ids){
+    public ResultEntity edit(@RequestParam String ids){
         cellecBankInfoService.removeBatchByIds(Arrays.asList(ids.split(",")));
-        return ResponseEntity.ok("删除成功");
+        return ResultEntity.success("删除成功");
     }
 }

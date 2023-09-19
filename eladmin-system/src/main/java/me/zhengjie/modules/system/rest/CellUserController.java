@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.CellInfo;
 import me.zhengjie.modules.system.domain.CellUser;
+import me.zhengjie.modules.system.domain.vo.ResultEntity;
 import me.zhengjie.modules.system.service.CellUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -29,32 +30,32 @@ public class CellUserController {
     private CellUserService cellUserService;
     @ApiOperation("查询所有藏品用户接口")
     @GetMapping("/list")
-    public ResponseEntity<Page<CellUser>> cellInfoList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+    public ResultEntity cellInfoList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
                                                        @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber){
         Page<CellUser> page=new Page<>(pageNumber,pageSize);
         QueryWrapper queryWrapper=new QueryWrapper();
         Page<CellUser> pageList=cellUserService.page(page,queryWrapper);
         ResponseEntity.status(200);
-        return ResponseEntity.ok(pageList);
+        return ResultEntity.success(pageList.getRecords());
     }
     @PostMapping("/add")
     @ApiOperation("添加藏品用户接口")
-    public ResponseEntity add(@RequestBody CellUser cellUser){
+    public ResultEntity add(@RequestBody CellUser cellUser){
         cellUser.setCreateTime(new Date());
         cellUserService.save(cellUser);
-        return ResponseEntity.ok("添加成功");
+        return ResultEntity.success("添加成功");
     }
     @PostMapping("/edit")
     @ApiOperation("修改藏品用户接口")
-    public ResponseEntity edit(@RequestBody CellUser cellUser){
+    public ResultEntity edit(@RequestBody CellUser cellUser){
         cellUser.setCreateTime(new Date());
         cellUserService.updateById(cellUser);
-        return ResponseEntity.ok("修改成功");
+        return ResultEntity.success("修改成功");
     }
     @GetMapping("/delete")
     @ApiOperation("删除用户")
-    public ResponseEntity delete(@RequestParam String ids){
+    public ResultEntity delete(@RequestParam String ids){
         cellUserService.removeBatchByIds(Arrays.asList(ids.split(",")));
-        return ResponseEntity.ok("删除成功");
+        return ResultEntity.success("删除成功");
     }
 }
