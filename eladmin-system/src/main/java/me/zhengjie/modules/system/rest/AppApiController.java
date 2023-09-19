@@ -44,7 +44,6 @@ public class AppApiController {
     private CellInfoService cellInfoService;
     @Autowired
     private CellecAddressService cellecAddressService;
-
     @ApiOperation("查询所有部门")
     @GetMapping("/getDeptList")
     public ResultEntity getDeptList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
@@ -142,10 +141,36 @@ public class AppApiController {
                                                      @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
                                                      @RequestParam String userId){
         QueryWrapper<CollecBankWithdrawalRecord> queryWrapper=new QueryWrapper<>();
-        queryWrapper.lambda().eq(CollecBankWithdrawalRecord::getUserId,userId).orderByDesc(CollecBankWithdrawalRecord::getCreateTime);
+        queryWrapper.lambda().eq(CollecBankWithdrawalRecord::getUserId,userId)
+                .orderByDesc(CollecBankWithdrawalRecord::getCreateTime);
         Page<CollecBankWithdrawalRecord> page=new Page<>(pageNumber,pageSize);
         Page<CollecBankWithdrawalRecord> pageList=collecBankWithdrawalRecordService.page(page,queryWrapper);
         return ResultEntity.success(pageList.getRecords());
+    }
+
+    @Autowired
+    private CellOrderInfoService cellOrderInfoService;
+    @ApiOperation("订单信息列表-根据用户查询订单")
+    @GetMapping("/cellOrderInfoList")
+    public ResultEntity cellOrderInfoList (@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                           @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                           @RequestParam String userId,
+                                           @RequestParam(value = "descOrAsc",defaultValue = "0") Integer descOrAsc){
+        QueryWrapper<CellOrderInfo> queryWrapper=new QueryWrapper<>();
+        queryWrapper.lambda().eq(CellOrderInfo::getUserId,userId);
+        if(descOrAsc==0){
+            queryWrapper.lambda().orderByDesc(CellOrderInfo::getCreateTime);
+        }else {
+            queryWrapper.lambda().orderByAsc(CellOrderInfo::getCreateTime);
+        }
+        Page<CellOrderInfo> page=new Page<>(pageNumber,pageSize);
+        Page<CellOrderInfo> pageList=cellOrderInfoService.page(page,queryWrapper);
+        return ResultEntity.success(pageList.getRecords(),"查询成功");
+    }
+    @ApiOperation("订单信息列表-根据id查询订单")
+    @GetMapping("/cellOrderInfoById")
+    public ResultEntity cellOrderInfoList (@RequestParam String id){
+        return ResultEntity.success(cellOrderInfoService.getById(id),"查询成功");
     }
 }
 
