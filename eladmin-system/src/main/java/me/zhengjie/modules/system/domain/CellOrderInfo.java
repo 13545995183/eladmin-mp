@@ -38,13 +38,15 @@ public class CellOrderInfo {
     @ApiModelProperty(value = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+    @ApiModelProperty(value = "藏品名称")
+    private String name;
     @ApiModelProperty(value = "创建人")
-    private String createName;
+    private String createBy;
     @ApiModelProperty(value = "更新时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     @ApiModelProperty(value = "更新人")
-    private String updateName;
+    private String updateBy;
     @ApiModelProperty(value = "是否启用")
     private BigInteger enabled;
     @ApiModelProperty(value = "商户id")

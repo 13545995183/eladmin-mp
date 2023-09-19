@@ -155,9 +155,17 @@ public class AppApiController {
     public ResultEntity cellOrderInfoList (@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
                                            @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
                                            @RequestParam String userId,
-                                           @RequestParam(value = "descOrAsc",defaultValue = "0") Integer descOrAsc){
+                                           @RequestParam(value = "descOrAsc",defaultValue = "0") Integer descOrAsc,
+                                           String searchInfo){
         QueryWrapper<CellOrderInfo> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda().eq(CellOrderInfo::getUserId,userId);
+        if(StringUtils.isNotEmpty(searchInfo)){
+            queryWrapper.lambda().and(
+                    item -> item.or().eq(CellOrderInfo::getCollId,searchInfo)
+                    .or()
+                    .like(CellOrderInfo::getName,searchInfo)
+            );
+        }
         if(descOrAsc==0){
             queryWrapper.lambda().orderByDesc(CellOrderInfo::getCreateTime);
         }else {
