@@ -125,7 +125,7 @@ public class AppApiController {
         Page<CellecBankInfo> pageList=cellecBankInfoService.page(page,queryWrapper);
         return ResponseEntity.ok(pageList);
     }
-    @ApiOperation("用户账户信息")
+    @ApiOperation("修改用户账户信息")
     @PostMapping("/updateCellecBankInfo")
     public  ResponseEntity updateCellecBankInfo(@RequestBody CellecBankInfo cellecBankInfo){
         cellecBankInfo.setUpdateTime(new Date());
