@@ -269,7 +269,7 @@ public class AppApiController {
     @Autowired
     private CellecIntegralActivityService cellecIntegralActivityService;
     @GetMapping("/cellecIntegralActivityList")
-    @ApiOperation("藏品积分列表")
+    @ApiOperation("藏品积分活动列表")
     public ResultEntity cellecIntegralActivityList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
                                                    @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
                                                    @RequestParam(value = "addReduce" , defaultValue = "2") Integer addReduce,
@@ -287,9 +287,45 @@ public class AppApiController {
         return ResultEntity.success(pageList.getRecords());
     }
     @GetMapping("/cellecIntegralActivityById")
-    @ApiOperation("藏品积分详情")
+    @ApiOperation("藏品积分活动详情")
     public ResultEntity cellecIntegralActivityById(@RequestParam(value = "id")Integer id){
         return ResultEntity.success(cellecIntegralActivityService.getById(id));
+    }
+    @Autowired
+    private CellecIntegralRecordService cellecIntegralRecordService;
+    @GetMapping("/cellecIntegralRecordList")
+    @ApiOperation("藏品积分记录列表")
+    public ResultEntity cellecIntegralRecordList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                                 @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                                 String userId,
+                                                 String searchInfo,
+                                                 @RequestParam(value = "addReduce" ,defaultValue = "2")Integer addReduce,
+                                                 @RequestParam(value = "descOrAsc",defaultValue = "desc")String descOrAsc){
+        QueryWrapper<CellecIntegralRecord> queryWrapper=new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(userId)){
+            queryWrapper.lambda().and(item ->
+                    item.like(CellecIntegralRecord::getUserId,userId));
+        }
+        if(StringUtils.isNotEmpty(searchInfo)){
+            queryWrapper.lambda().and(item ->
+                            item.like(CellecIntegralRecord::getIntegralName,searchInfo));
+        }
+        if(addReduce!=2){
+            queryWrapper.lambda().eq(CellecIntegralRecord::getAddReduce,addReduce);
+        }
+        if(descOrAsc.equals("desc")){
+            queryWrapper.lambda().orderByDesc(CellecIntegralRecord::getCreateTime);
+        }else if(descOrAsc.equals("asc")){
+            queryWrapper.lambda().orderByAsc(CellecIntegralRecord::getCreateTime);
+        }
+        Page<CellecIntegralRecord> page=new Page<>(pageNumber,pageSize);
+        Page<CellecIntegralRecord> pageList=cellecIntegralRecordService.page(page,queryWrapper);
+        return ResultEntity.success(pageList.getRecords(),"查询成功");
+    }
+    @GetMapping("/cellecIntegralRecordById")
+    @ApiOperation("藏品积分记录列表")
+    public ResultEntity cellecIntegralRecordById(@RequestParam(value = "id") String id){
+        return ResultEntity.success(cellecIntegralRecordService.getById(id));
     }
 }
 

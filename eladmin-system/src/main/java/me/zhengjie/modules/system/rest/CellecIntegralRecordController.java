@@ -33,6 +33,7 @@ public class CellecIntegralRecordController {
                              @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
                              String userId,
                              String searchInfo,
+                             @RequestParam(value = "addReduce" ,defaultValue = "2")Integer addReduce,
                              @RequestParam(value = "descOrAsc",defaultValue = "desc")String descOrAsc){
         QueryWrapper<CellecIntegralRecord> queryWrapper=new QueryWrapper<>();
         if(StringUtils.isNotEmpty(userId)){
@@ -41,9 +42,10 @@ public class CellecIntegralRecordController {
         }
         if(StringUtils.isNotEmpty(searchInfo)){
             queryWrapper.lambda().and(item ->
-                    item.like(CellecIntegralRecord::getIntegralName,searchInfo)).
-                    or().
-                    eq(CellecIntegralRecord::getAddReduce,searchInfo);
+                    item.like(CellecIntegralRecord::getIntegralName,searchInfo));
+        }
+        if(addReduce!=2){
+            queryWrapper.lambda().eq(CellecIntegralRecord::getAddReduce,addReduce);
         }
         if(descOrAsc.equals("desc")){
             queryWrapper.lambda().orderByDesc(CellecIntegralRecord::getCreateTime);
