@@ -36,7 +36,7 @@ public class CellecHaveInfo {
     @ApiModelProperty(value = "状态")
     private Integer stats;
     @ApiModelProperty(value = "分类")
-    private Integer is_Type;
+    private Integer isType;
     @ApiModelProperty(value = "状态")
     private String imageinfo;
     @ApiModelProperty(value = "用户id")
