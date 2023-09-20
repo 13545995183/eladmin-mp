@@ -211,7 +211,7 @@ public class AppApiController {
                             .or().like(CellecHaveInfo::getName,searchInfo)
             );
         }
-        queryWrapper.lambda().like(CellecHaveInfo::getHaveId,userId)
+        queryWrapper.lambda().eq(CellecHaveInfo::getUserId,userId)
                 .orderByDesc(CellecHaveInfo::getCreateTime);
         Page<CellecHaveInfo> page = new Page<>(pageNumber,pageSize);
         Page<CellecHaveInfo> pageList = cellecHaveInfoService.page(page,queryWrapper);
