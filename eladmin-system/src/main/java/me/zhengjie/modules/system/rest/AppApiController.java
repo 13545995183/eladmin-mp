@@ -255,5 +255,41 @@ public class AppApiController {
         Page<CellecPullInfo> pageList = cellecPullInfoService.page(page,queryWrapper);
         return ResultEntity.success(pageList.getRecords(),"查询成功");
     }
+    @Autowired
+    private CellecIntegralService cellecIntegralService;
+    @GetMapping("/queryCellecIntegralByUserId")
+    @ApiOperation("藏品积分列表")
+    public ResultEntity list(@RequestParam(value = "userId") String userId){
+        QueryWrapper<CellecIntegral> queryWrapper=new QueryWrapper<>();
+        queryWrapper.lambda().eq(CellecIntegral::getUserId,userId)
+                .last(" limit 1");
+        CellecIntegral cellecIntegral=cellecIntegralService.getOne(queryWrapper);
+        return ResultEntity.success(cellecIntegral);
+    }
+    @Autowired
+    private CellecIntegralActivityService cellecIntegralActivityService;
+    @GetMapping("/cellecIntegralActivityList")
+    @ApiOperation("藏品积分列表")
+    public ResultEntity cellecIntegralActivityList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                                   @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                                   @RequestParam(value = "addReduce" , defaultValue = "2") Integer addReduce,
+                                                   String searchInfo){
+        QueryWrapper<CellecIntegralActivity> queryWrapper=new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(searchInfo)){
+            queryWrapper.lambda().and(item ->
+                    item.like(CellecIntegralActivity::getName,searchInfo));
+        }
+        if(addReduce!=2){
+            queryWrapper.lambda().eq(CellecIntegralActivity::getAddReduce,addReduce);
+        }
+        Page<CellecIntegralActivity> page=new Page<>(pageNumber,pageSize);
+        Page<CellecIntegralActivity> pageList=cellecIntegralActivityService.page(page,queryWrapper);
+        return ResultEntity.success(pageList.getRecords());
+    }
+    @GetMapping("/cellecIntegralActivityById")
+    @ApiOperation("藏品积分详情")
+    public ResultEntity cellecIntegralActivityById(@RequestParam(value = "id")Integer id){
+        return ResultEntity.success(cellecIntegralActivityService.getById(id));
+    }
 }
 

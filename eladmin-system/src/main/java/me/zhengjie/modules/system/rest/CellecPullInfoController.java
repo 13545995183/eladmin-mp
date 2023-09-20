@@ -53,6 +53,7 @@ public class CellecPullInfoController {
     @ApiOperation("添加藏品拉新用户")
     public ResultEntity add(@RequestBody CellecPullInfo cellecPullInfo){
         cellecPullInfo.setCreateTime(new Date());
+        cellecPullInfoService.save(cellecPullInfo);
         return ResultEntity.success("添加成功");
     }
     @PostMapping("/edit")

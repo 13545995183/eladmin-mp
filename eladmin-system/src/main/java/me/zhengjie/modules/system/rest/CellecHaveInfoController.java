@@ -52,6 +52,7 @@ public class CellecHaveInfoController {
     @ApiOperation("添加藏品用户拥有")
     public ResultEntity add(@RequestBody CellecHaveInfo cellecHaveInfo){
         cellecHaveInfo.setCreateTime(new Date());
+        cellecHaveInfoService.save(cellecHaveInfo);
         return ResultEntity.success("添加成功");
     }
     @PostMapping("/edit")
