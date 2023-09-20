@@ -18,7 +18,7 @@ import java.util.Date;
  * 2023-9-20
  *
  * */
-@TableName("collections_info")
+@TableName("collec_pull_info")
 @Api
 @ApiModel("藏品拉新人员信息")
 @Getter
