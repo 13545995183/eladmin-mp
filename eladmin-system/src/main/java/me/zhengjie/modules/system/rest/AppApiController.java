@@ -258,7 +258,7 @@ public class AppApiController {
     @Autowired
     private CellecIntegralService cellecIntegralService;
     @GetMapping("/queryCellecIntegralByUserId")
-    @ApiOperation("藏品积分列表")
+    @ApiOperation("藏品用户积分详情")
     public ResultEntity list(@RequestParam(value = "userId") String userId){
         QueryWrapper<CellecIntegral> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda().eq(CellecIntegral::getUserId,userId)
@@ -323,7 +323,7 @@ public class AppApiController {
         return ResultEntity.success(pageList.getRecords(),"查询成功");
     }
     @GetMapping("/cellecIntegralRecordById")
-    @ApiOperation("藏品积分记录列表")
+    @ApiOperation("藏品积分记录详情")
     public ResultEntity cellecIntegralRecordById(@RequestParam(value = "id") String id){
         return ResultEntity.success(cellecIntegralRecordService.getById(id));
     }
