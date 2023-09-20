@@ -231,5 +231,29 @@ public class AppApiController {
         return ResultEntity.success("修改成功");
     }
 
+    @Autowired
+    private CellecPullInfoService cellecPullInfoService;
+    @GetMapping("/cellecPullInfoList")
+    @ApiOperation("藏品拉新用户列表")
+    public ResultEntity cellecPullInfoList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                           @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                           @RequestParam(value = "userId")String userId,
+                                           String searchInfo){
+        QueryWrapper<CellecPullInfo> queryWrapper=new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(userId)){
+            queryWrapper.lambda().and(item ->
+                            item.like(CellecPullInfo::getPullUserId,userId))
+                    .or().like(CellecPullInfo::getCoverPullUserId,userId);
+        }
+        if(StringUtils.isNotEmpty(searchInfo)){
+            queryWrapper.lambda().and(item ->
+                    item.like(CellecPullInfo::getPullUserName,searchInfo)
+                            .or().like(CellecPullInfo::getCoverPullUserName,searchInfo)
+            );
+        }
+        Page<CellecPullInfo> page = new Page<>(pageNumber,pageSize);
+        Page<CellecPullInfo> pageList = cellecPullInfoService.page(page,queryWrapper);
+        return ResultEntity.success(pageList.getRecords(),"查询成功");
+    }
 }
 
