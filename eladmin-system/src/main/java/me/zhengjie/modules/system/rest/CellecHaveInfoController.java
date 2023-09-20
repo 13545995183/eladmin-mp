@@ -42,7 +42,7 @@ public class CellecHaveInfoController {
             );
         }
         if(StringUtils.isNotEmpty(userId)){
-            queryWrapper.lambda().like(CellecHaveInfo::getUserId,userId);
+            queryWrapper.lambda().like(CellecHaveInfo::getHaveId,userId);
         }
         Page<CellecHaveInfo> page = new Page<>(pageNumber,pageSize);
         Page<CellecHaveInfo> pageList = cellecHaveInfoService.page(page,queryWrapper);
