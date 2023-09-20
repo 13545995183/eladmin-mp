@@ -41,10 +41,10 @@ public class CellecIntegralActivity {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @ApiModelProperty(value = "创建人")
-    private String createName;
+    private String createBy;
     @ApiModelProperty(value = "更新时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     @ApiModelProperty(value = "更新人")
-    private String updateName;
+    private String updateBy;
 }
