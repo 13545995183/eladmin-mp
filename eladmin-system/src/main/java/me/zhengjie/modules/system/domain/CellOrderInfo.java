@@ -13,7 +13,7 @@ import java.util.Date;
 
 @TableName("collec_order")
 @Api
-@ApiModel("藏品用户账户信息")
+@ApiModel("藏品用户订单信息")
 @Getter
 @Setter
 public class CellOrderInfo {

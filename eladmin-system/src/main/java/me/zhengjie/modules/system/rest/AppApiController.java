@@ -180,5 +180,56 @@ public class AppApiController {
     public ResultEntity cellOrderInfoList (@RequestParam String id){
         return ResultEntity.success(cellOrderInfoService.getById(id),"查询成功");
     }
+    @PostMapping("/addCellOrderInfo")
+    @ApiOperation("添加藏品订单")
+    public ResultEntity addcellOrderInfo(@RequestBody CellOrderInfo cellOrderInfo){
+        cellOrderInfo.setCreateTime(new Date());
+        cellOrderInfoService.save(cellOrderInfo);
+        return ResultEntity.success("添加成功");
+    }
+    @PostMapping("/editCellOrderInfo")
+    @ApiOperation("修改藏品订单")
+    public ResultEntity editcellOrderInfo(@RequestBody CellOrderInfo cellOrderInfo){
+        cellOrderInfo.setUpdateTime(new Date());
+        cellOrderInfoService.saveOrUpdate(cellOrderInfo);
+        return ResultEntity.success("修改成功");
+    }
+
+    @Autowired
+    private CellecHaveInfoService cellecHaveInfoService;
+    @GetMapping("/cellecHaveInfoList")
+    @ApiOperation("藏品用户拥有列表")
+    public ResultEntity list(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                             @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                             @RequestParam(value = "userId") String userId,
+                             String searchInfo){
+        QueryWrapper<CellecHaveInfo> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(searchInfo)){
+            //多条件查询
+            queryWrapper.lambda().and(
+                    item -> item.or().eq(CellecHaveInfo::getCollecId,searchInfo)
+                            .or().like(CellecHaveInfo::getName,searchInfo)
+            );
+        }
+        queryWrapper.lambda().like(CellecHaveInfo::getUserId,userId)
+                .orderByDesc(CellecHaveInfo::getCreateTime);
+        Page<CellecHaveInfo> page = new Page<>(pageNumber,pageSize);
+        Page<CellecHaveInfo> pageList = cellecHaveInfoService.page(page,queryWrapper);
+        return ResultEntity.success(pageList.getRecords(),"查询成功");
+    }
+    @PostMapping("/addCellecHaveInfo")
+    @ApiOperation("添加藏品用户拥有")
+    public ResultEntity addCellecHaveInfo(@RequestBody CellecHaveInfo cellecHaveInfo){
+        cellecHaveInfo.setCreateTime(new Date());
+        return ResultEntity.success("添加成功");
+    }
+    @PostMapping("/editCellecHaveInfo")
+    @ApiOperation("修改藏品用户拥有")
+    public ResultEntity editCellecHaveInfo(@RequestBody CellecHaveInfo cellecHaveInfo){
+        cellecHaveInfo.setUpdateTime(new Date());
+        cellecHaveInfoService.saveOrUpdate(cellecHaveInfo);
+        return ResultEntity.success("修改成功");
+    }
+
 }
 
