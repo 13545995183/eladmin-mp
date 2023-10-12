@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -18,7 +19,7 @@ import java.util.Date;
 @ApiModel("藏品用户信地址信息")
 @Getter
 @Setter
-public class CellecAddress {
+public class CellecAddress implements Serializable {
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "id")
     private Integer id;

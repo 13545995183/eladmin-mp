@@ -20,10 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Qian Sheng
@@ -80,24 +77,21 @@ public class AppApiController {
     @GetMapping("/cellInfoList")
     public ResultEntity cellInfoList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
                                                       @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber){
-        Page<CellInfo> page=new Page<>(pageNumber,pageSize);
+        /*Page<CellInfo> page=new Page<>(pageNumber,pageSize);
         QueryWrapper queryWrapper=new QueryWrapper();
         Page<CellInfo> pageList=cellInfoService.page(page,queryWrapper);
-        ResponseEntity.status(200);
-        return ResultEntity.success(pageList.getRecords());
+        ResponseEntity.status(200);*/
+        List<Map> cellList=cellInfoService.queryList();
+        return ResultEntity.success(cellList);
     }
 
     @ApiOperation("藏品用户地址列表")
     @GetMapping("/collecAddressInfoByUserId")
     public ResultEntity cellAddressList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-                                                               @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
-                                                               @RequestParam String userId){
-
-        QueryWrapper<CellecAddress> queryWrapper= new QueryWrapper<>();
-        queryWrapper.lambda().eq(CellecAddress::getUserId,userId);
-        Page<CellecAddress> page=new Page<>(pageNumber,pageSize);
-        Page<CellecAddress> pageList=cellecAddressService.page(page,queryWrapper);
-        return ResultEntity.success(pageList.getRecords());
+                                        @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                        @RequestParam String userId){
+        List<CellecAddress> addressList=cellecAddressService.listByUserId(userId);
+        return ResultEntity.success(addressList);
     }
     @ApiOperation("修改用户地址列表")
     @PostMapping("/updateAddress")
