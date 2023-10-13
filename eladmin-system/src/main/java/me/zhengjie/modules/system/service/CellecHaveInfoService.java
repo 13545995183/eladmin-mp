@@ -9,4 +9,5 @@ import me.zhengjie.modules.system.domain.CellecHaveInfo;
  *
  * */
 public interface CellecHaveInfoService extends IService<CellecHaveInfo> {
+    CellecHaveInfo queryCollHaveInfoByUserId(String userId);
 }

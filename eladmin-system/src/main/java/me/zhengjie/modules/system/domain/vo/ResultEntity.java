@@ -33,6 +33,13 @@ public class ResultEntity<T> {
         resultEntity.msg="成功";
         return resultEntity;
     }
+    public static <T> ResultEntity<T> success(){
+        ResultEntity<T> resultEntity=new ResultEntity<>();
+        resultEntity.data=null;
+        resultEntity.code=200;
+        resultEntity.msg="成功";
+        return resultEntity;
+    }
     public static <T> ResultEntity<T> error(T object){
         ResultEntity<T> resultEntity=new ResultEntity<>();
         resultEntity.data=object;
@@ -51,6 +58,14 @@ public class ResultEntity<T> {
         ResultEntity<T> resultEntity=new ResultEntity<>();
         resultEntity.code=400;
         resultEntity.msg=msg;
+        resultEntity.data=null;
+        return resultEntity;
+    }
+    public static <T> ResultEntity<T> error(){
+        ResultEntity<T> resultEntity=new ResultEntity<>();
+        resultEntity.code=400;
+        resultEntity.msg="失败";
+        resultEntity.data=null;
         return resultEntity;
     }
 }

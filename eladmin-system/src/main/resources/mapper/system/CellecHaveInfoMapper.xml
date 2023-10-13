@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="me.zhengjie.modules.system.mapper.CellecHaveInfoMapper">
+    <cache-ref namespace="me.zhengjie.modules.system.mapper.CellecHaveInfoMapper"/>
+    <select id="queryCollHaveInfoByUserId" parameterType="String" useCache="true" resultType="me.zhengjie.modules.system.domain.CellecHaveInfo">
+        select * from collections_have where user_id='${userId}'
+    </select>
 </mapper>

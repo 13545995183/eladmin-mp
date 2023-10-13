@@ -62,8 +62,8 @@ public class AppApiController {
     @ApiOperation("查询所有藏品用户角色")
     @GetMapping("/getCellUserList")
     public ResultEntity getCellUserList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-                                                          @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
-                                                          String CellUserPhone){
+                                        @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                        String CellUserPhone){
         Page page=new Page(pageNumber,pageSize);
         QueryWrapper<CellUser> queryWrapper=new QueryWrapper<>();
         if (StringUtils.isNotEmpty(CellUserPhone)){
@@ -76,11 +76,7 @@ public class AppApiController {
     @ApiOperation("查询所有藏品信息接口")
     @GetMapping("/cellInfoList")
     public ResultEntity cellInfoList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-                                                      @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber){
-        /*Page<CellInfo> page=new Page<>(pageNumber,pageSize);
-        QueryWrapper queryWrapper=new QueryWrapper();
-        Page<CellInfo> pageList=cellInfoService.page(page,queryWrapper);
-        ResponseEntity.status(200);*/
+                                     @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber){
         List<Map> cellList=cellInfoService.queryList();
         return ResultEntity.success(cellList);
     }
@@ -140,6 +136,11 @@ public class AppApiController {
         Page<CollecBankWithdrawalRecord> page=new Page<>(pageNumber,pageSize);
         Page<CollecBankWithdrawalRecord> pageList=collecBankWithdrawalRecordService.page(page,queryWrapper);
         return ResultEntity.success(pageList.getRecords());
+    }
+    @ApiOperation("交易信息详情")
+    @GetMapping("/cellBankWithdrawalRecordById")
+    public ResultEntity cellBankWithdrawalRecordById(@RequestParam("id")String id){
+        return ResultEntity.success(collecBankWithdrawalRecordService.getById(id));
     }
 
     @Autowired
@@ -320,6 +321,23 @@ public class AppApiController {
     @ApiOperation("藏品积分记录详情")
     public ResultEntity cellecIntegralRecordById(@RequestParam(value = "id") String id){
         return ResultEntity.success(cellecIntegralRecordService.getById(id));
+    }
+    @ApiOperation("二级缓存-订单信息")
+    @GetMapping("queryOrderListInfo")
+    public List<Map>queryOrderListInfo (@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                        @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                        @RequestParam(value = "userId") String userId){
+        String sqlInfo=" select * from collec_order where user_id ='"+userId+"' limit "+pageNumber+","+pageSize;
+        List<Map> resultSql=cellOrderInfoService.queryAllInfo(sqlInfo);
+        return resultSql;
+    }
+    @ApiOperation("二级缓存-藏品信息")
+    @GetMapping("/queryCollHaveInfoByUserId")
+    public ResultEntity queryCollHaveInfoByUserId(@RequestParam("userId") String userId){
+        CellecHaveInfo cellecHaveInfo=cellecHaveInfoService.queryCollHaveInfoByUserId(userId);
+        System.out.println("-------------------------------------------------------------");
+        CellecHaveInfo cellecHaveInfo1=cellecHaveInfoService.queryCollHaveInfoByUserId(userId);
+        return ResultEntity.success(cellecHaveInfo);
     }
 }
 
