@@ -12,6 +12,7 @@ import me.zhengjie.modules.system.domain.vo.ResultEntity;
 import me.zhengjie.modules.system.service.*;
 import me.zhengjie.utils.PageResult;
 import me.zhengjie.utils.StringUtils;
+import net.dreamlu.mica.core.result.R;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -321,6 +322,26 @@ public class AppApiController {
     @ApiOperation("藏品积分记录详情")
     public ResultEntity cellecIntegralRecordById(@RequestParam(value = "id") String id){
         return ResultEntity.success(cellecIntegralRecordService.getById(id));
+    }
+
+    @Autowired
+    private CollectionsMarketService collectionsMarketService;
+    @ApiOperation("藏品用户寄售流转列表")
+    @GetMapping("/queryCollectionsMarketList")
+    public ResultEntity queryCollectionsMarketList(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
+                                                   @RequestParam(value = "pageNumber",defaultValue = "1") Integer pageNumber,
+                                                   @RequestParam(value="userId") String userId){
+        QueryWrapper<CollectionsMarket> queryWrapper=new QueryWrapper<>();
+        queryWrapper.lambda().eq(CollectionsMarket::getUserId,userId)
+                .or().eq(CollectionsMarket::getOtherUserId,userId);
+        Page<CollectionsMarket> page=new Page<>(pageNumber,pageSize);
+        Page<CollectionsMarket> pageList=collectionsMarketService.page(page,queryWrapper);
+        return ResultEntity.success(pageList);
+    }
+    @ApiOperation("藏品用户寄售流转详情")
+    @GetMapping("/queryCollectionsMarketById")
+    public ResultEntity queryCollectionsMarketList(@RequestParam("id")String id){
+        return ResultEntity.success(collectionsMarketService.getById(id));
     }
     @ApiOperation("二级缓存-订单信息")
     @GetMapping("queryOrderListInfo")

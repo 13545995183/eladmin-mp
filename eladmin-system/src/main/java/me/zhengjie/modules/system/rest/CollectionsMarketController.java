@@ -18,7 +18,7 @@ import java.util.Date;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "藏品用户寄售流转记录")
-@RequestMapping("/api/cellAddressInfo")
+@RequestMapping("/api/cellMarketInfo")
 public class CollectionsMarketController {
     @Autowired
     private CollectionsMarketService collectionsMarketService;
