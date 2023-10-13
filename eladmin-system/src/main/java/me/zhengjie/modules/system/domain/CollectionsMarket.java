@@ -57,7 +57,7 @@ public class CollectionsMarket {
     @ApiModelProperty(value = "藏品id")
     private Integer collecId;
     @ApiModelProperty(value = "唯一值")
-    private Integer onlyInfo;
+    private BigInteger onlyInfo;
     @ApiModelProperty(value = "用户id（寄售的卖家、买入的买家）")
     private BigInteger userId;
     @ApiModelProperty(value = "另一方用户id（寄售的买家、买入的卖家）")
