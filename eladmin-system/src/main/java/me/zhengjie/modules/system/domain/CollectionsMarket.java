@@ -59,9 +59,9 @@ public class CollectionsMarket {
     @ApiModelProperty(value = "唯一值")
     private Integer onlyInfo;
     @ApiModelProperty(value = "用户id（寄售的卖家、买入的买家）")
-    private Integer userId;
+    private BigInteger userId;
     @ApiModelProperty(value = "另一方用户id（寄售的买家、买入的卖家）")
-    private Integer otherUserId;
+    private BigInteger otherUserId;
     @ApiModelProperty(value = "结束时间，取消/成交时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date finishTime;
