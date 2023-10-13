@@ -13,9 +13,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigInteger;
 import java.util.Date;
 
-@TableName("user_info")
+@TableName("collections_market")
 @Api
-@ApiModel("藏品用户信息")
+@ApiModel("藏品用户寄售流转记录")
 @Getter
 @Setter
 public class CollectionsMarket {
