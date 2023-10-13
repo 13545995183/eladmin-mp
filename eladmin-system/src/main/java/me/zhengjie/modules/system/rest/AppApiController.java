@@ -353,12 +353,11 @@ public class AppApiController {
         return resultSql;
     }
     @ApiOperation("二级缓存-藏品信息")
-    @GetMapping("/queryCollHaveInfoByUserId")
+    @GetMapping("/queryCollHaveInfoList")
     public ResultEntity queryCollHaveInfoByUserId(@RequestParam("userId") String userId){
-        CellecHaveInfo cellecHaveInfo=cellecHaveInfoService.queryCollHaveInfoByUserId(userId);
-        System.out.println("-------------------------------------------------------------");
-        CellecHaveInfo cellecHaveInfo1=cellecHaveInfoService.queryCollHaveInfoByUserId(userId);
-        return ResultEntity.success(cellecHaveInfo);
+        String sqlInfo="select * from collections_have  limit 20";
+        List<Map> resultList=cellecHaveInfoService.queryCollHaveInfoByUserId(sqlInfo);
+        return ResultEntity.success();
     }
 }
 

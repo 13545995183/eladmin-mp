@@ -7,6 +7,9 @@ import me.zhengjie.modules.system.service.CellecHaveInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * qiansheng
  * 2023-9-20
@@ -14,8 +17,10 @@ import org.springframework.stereotype.Service;
  * */
 @Service
 public class CellecHaveInfoServiceImpl extends ServiceImpl<CellecHaveInfoMapper,CellecHaveInfo> implements CellecHaveInfoService {
+    @Autowired
+    private CellecHaveInfoMapper cellecHaveInfoMapper;
     @Override
-    public CellecHaveInfo queryCollHaveInfoByUserId(String userId) {
-        return this.baseMapper.queryCollHaveInfoByUserId(userId);
+    public List<Map>  queryCollHaveInfoByUserId(String userId) {
+        return cellecHaveInfoMapper.queryCollHaveInfoByUserId(userId);
     }
 }

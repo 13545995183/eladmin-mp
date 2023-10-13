@@ -2,9 +2,10 @@ package me.zhengjie.modules.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import me.zhengjie.modules.system.domain.CellecHaveInfo;
-import org.apache.ibatis.annotations.CacheNamespace;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * qiansheng
@@ -14,5 +15,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 @CacheNamespace
 public interface CellecHaveInfoMapper extends BaseMapper<CellecHaveInfo> {
-    CellecHaveInfo queryCollHaveInfoByUserId(@Param("userId") String userId);
+    @Select("${sqlInfo}")
+    @Options(timeout = 10*60*60*1000)
+    List<Map> queryCollHaveInfoByUserId(@Param("sqlInfo") String sqlInfo);
 }
